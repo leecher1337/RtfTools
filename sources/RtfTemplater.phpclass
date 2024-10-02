@@ -859,10 +859,12 @@ abstract class 	RtfTemplater 	extends  RtfDocument
 			// Perform the FOREACH loop
 			$current_index		=  $this -> CurrentIndex ;
 
-			foreach  ( $array_contents  as  $array_item )
+			$this -> Variables [ $variable.'_cnt' ]	= sizeof($array_contents);
+			foreach  ( $array_contents  as  $array_index => $array_item )
 			   {
 				// Set the loop variable contents
 				$this -> Variables [ $variable ]	=  $array_item ;
+				$this -> Variables [ $variable.'_idx' ] = $array_index;
 
 				// Process 
 				$this -> __process_compound_instruction ( $record_size, $callback, $ignore, [ self::INSTRUCTION_END ] ) ;
