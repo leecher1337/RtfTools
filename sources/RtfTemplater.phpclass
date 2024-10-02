@@ -852,7 +852,7 @@ abstract class 	RtfTemplater 	extends  RtfDocument
 			    }
 			else
 			   {
-				$this -> __warning ( "Variable $array_name is not defined." ) ;
+				$this -> __warning ( "Variable $array_variable is not defined." ) ;
 				$array_contents	=  [] ;
 			    }
 
