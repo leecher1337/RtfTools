@@ -835,9 +835,21 @@ abstract class 	RtfTemplater 	extends  RtfDocument
 
 			// Check that the array variable is defined
 			if  ( isset ( $this -> Variables [ $array_variable ] ) )
-			   {
 				$array_contents		=  $this -> Variables [ $array_variable ] ;
-
+			else
+			{
+				$result  =  $this->__evaluate_expression('$'.$array_variable);
+				if  ( $result [ 'error' ] )
+				   {
+					$this -> __warning ( "Variable $array_variable is not defined\nError is : {$result [ 'error' ]}" ) ;
+					$array_contents	=  [] ;
+					}
+				else
+					$array_contents	=  $result [ 'value' ] ;
+			}
+			
+			if  ( isset ( $array_contents ) )
+			   {
 				if  ( is_array ( $array_contents )  ||  //is_callable ( $array_contents )  ||
 					( is_object ( $array_contents )  && 
 					    (
@@ -1122,7 +1134,7 @@ abstract class 	RtfTemplater 	extends  RtfDocument
 					    ] ;
 				    }
 				// %FOREACH ( $var IN $other_var )% construct
-				else if  ( preg_match ( '/^% \s* FOREACH \s* \( \s* \$ (?P<var> [a-z_][a-z0-9_]* ) \s+ IN \s+ \$ (?P<iterator> [a-z_][a-z0-9_]*) \s* \) \s* %$/imsx', $text, $match ) )
+				else if  ( preg_match ( '/^% \s* FOREACH \s* \( \s* \$ (?P<var> [a-z_][a-z0-9_]* ) \s+ IN \s+ \$ (?P<iterator> [a-z_][a-z0-9_\[\]'."\'".']*) \s* \) \s* %$/imsx', $text, $match ) )
 				   {
 					$result		=
 					   [
